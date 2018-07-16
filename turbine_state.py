@@ -9,10 +9,20 @@ class TurbineState():
         self.thermodynamic = ThermodynamicState()
         self.kinematic = KinematicState(omega, r)
         self.area = 2*pi *r*h
+        self.height = h
+        self.radius = r
         self.massflow = 0
+        self.rothalpy = 0
+
+
+
 
     def set_massflow(self):
         self.massflow = self.area*self.thermodynamic.static.D*self.kinematic.c.r
+
+    def set_rothalpy(self):
+        self.rothalpy = self.thermodynamic.static.H + (self.kinematic.w.mag**2)/2 -(self.kinematic.u.mag**2)/2
+
     def set_previous(self, state_in):
         self.previous_state=state_in
 
@@ -20,25 +30,66 @@ class TurbineState():
         self.first_state=state_first
 
 
+    def set_htotal_work(self):
+        work = self.previous_state.kinematic.c.theta*self.previous_state.kinematic.u.theta - \
+               abs(self.kinematic.c.theta*self.kinematic.u.theta)
+        ho3 = self.previous_state.thermodynamic.total.H - work
+        # print(ho3)
+        self.thermodynamic.set_totalHS(ho3, self.thermodynamic.static.S)
+
+
+    def set_static_dor_pstatic(self, DOR, pstatic):
+        work = self.previous_state.thermodynamic.total.H - self.thermodynamic.total.H
+        h = (DOR*self.first_state.thermodynamic.static.H - self.previous_state.thermodynamic.static.H)/ \
+            (DOR-1.0)
+
+        self.thermodynamic.set_staticHP(h, pstatic)
+
+        # denom = work/DOR
+        # w = np.sqrt(denom - (self.previous_state.kinematic.c.mag**2 - self.first_state.kinematic.c.mag**2)
+        #            - (-self.previous_state.kinematic.w.mag**2)
+        #            - (-self.kinematic.u.theta**2 + self.previous_state.kinematic.u.theta**2))
+        # print(w)
+        #
+        # print(self.kinematic.u.theta-self.kinematic.c.theta)
+        # self.kinematic.w.set_vector_with_thetacomponent_mag(self.kinematic.u.theta-self.kinematic.c.theta, w)
 
 
 
 
-    def set_state_with_etatotal_ptotal_alpha(self, etatt, ptotal_out, alpha):
-        c0=300
-        minimize(self.calc_error_etatotal, c0, args=(etatt, ptotal_out, alpha))
     def set_state_with_etastatic_pstatic_alpha(self, etats, pstatic_out, alpha):
         c0 = 300
         minimize(self.calc_error_etastatic, c0, args=(etats, pstatic_out, alpha))
-    def set_state_with_etastatic_pstatic_R(self, etats, pstatic_out, R):
-        alpha0 = 40
-        minimize(self.calc_error_etastatic_alpha, alpha0, args=(etats, pstatic_out, R))
+    def calc_error_etastatic(self, c, etats, pstatic_out, alpha):
+        print(c[0])
+        self.thermodynamic.set_htotal_with_etastatic_statetotal_pstatic(etats,
+                                                                        self.previous_state.thermodynamic.total,
+                                                                        pstatic_out)
+        self.thermodynamic.set_static_htotal_c_p(c[0], pstatic_out)
+        self.kinematic.set_state_alpha_cmag(alpha, c[0])
+        self.set_massflow()
+        error = (self.massflow - self.previous_state.massflow)**2
+        return error
+
+
+
+
+
+
+
+
 
 
 
     #error functions for minization
+    def set_state_with_etatotal_ptotal_alpha(self, etatt, ptotal_out, alpha):
+        c0=300
+        minimize(self.calc_error_etatotal, c0, args=(etatt, ptotal_out, alpha))
+
+    def set_state_with_etastatic_pstatic_R(self, etats, pstatic_out, R):
+        alpha0 = 40
+        minimize(self.calc_error_etastatic_alpha, alpha0, args=(etats, pstatic_out, R))
     def calc_error_etastatic_alpha(self,alpha,etats, pstatic_out, R):
-        print(alpha[0])
         h_static_out = (self.previous_state.thermodynamic.static.H - R*self.first_state.thermodynamic.static.H )/(1-R)
         self.thermodynamic.set_staticHP(h_static_out,pstatic_out)
 
@@ -49,17 +100,6 @@ class TurbineState():
         c_mag = self.thermodynamic.get_c_static_total()
         self.thermodynamic.set_total_static_c(c_mag)
         self.kinematic.set_state_alpha_cmag(alpha[0], c_mag)
-        self.set_massflow()
-        error = (self.massflow - self.previous_state.massflow)**2
-        return error
-
-    def calc_error_etastatic(self, c, etats, pstatic_out, alpha):
-
-        self.thermodynamic.set_htotal_with_etastatic_statetotal_pstatic(etats,
-                                                                        self.previous_state.thermodynamic.total,
-                                                                        pstatic_out)
-        self.thermodynamic.set_static_htotal_c_p(c[0], pstatic_out)
-        self.kinematic.set_state_alpha_cmag(alpha, c[0])
         self.set_massflow()
         error = (self.massflow - self.previous_state.massflow)**2
         return error
@@ -86,14 +126,27 @@ class TurbineState():
         print("static Pressure: "     +str(self.thermodynamic.static.P))
         print("static Temperature: "  +str(self.thermodynamic.static.T))
         print("")
-        print("Mag Absolute Velocity: " + str(np.linalg.norm(self.kinematic.c.vec)))
-        print("Absolute Velocity: " + str(self.kinematic.c.vec))
-        print("Mag Relative Velocity: "  +str(np.linalg.norm(self.kinematic.w.vec)))
-        print("Relative Velocity: "  +str(self.kinematic.w.vec))
+
+        print("Rothalpy: " + str(self.rothalpy))
+        print("Mag Absolute Velocity: " + str(self.kinematic.c.mag))
+        print("Absolute Velocity: " + str([self.kinematic.c.theta, self.kinematic.c.r]))
+        print("Mag Relative Velocity: "  +str(self.kinematic.w.mag))
+        print("Relative Velocity: "  +str([self.kinematic.w.theta, self.kinematic.w.r]))
+        print("Absolute Angle: "+ str(self.kinematic.alpha))
+        print("Relative Angle: " +str(self.kinematic.beta))
         print("Absolute Mach: " + str(self.kinematic.c.mach))
         print("Relative Mach: " + str(self.kinematic.w.mach))
+        print("Mag Rotational Velocity: " + str(self.kinematic.u.mag))
         print("Rotational Velocity: "+str(self.kinematic.u.vec))
         print("")
         print("Massflow: "+ str(self.massflow))
         print("Area: "+ str(self.area))
 
+    def get_turbinestate_info(self):
+        return dict({"thermodynamic": self.thermodynamic.get_thermodynamic_info(),
+                     "kinematic": self.kinematic.get_kinematic_info(),
+                     "massflow": self.massflow,
+                     "area": self.area,
+                     "height": self.height,
+                     "radius": self.radius,
+                     "rothalpy": self.rothalpy})

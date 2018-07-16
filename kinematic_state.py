@@ -11,11 +11,22 @@ class KinematicState():
         self.r = r
         self.omega = omega
 
+    def set_angles(self):
+        self.alpha = self.c.angle
+        self.beta = self.w.angle
+
     def set_state_alpha_cmag(self, alpha, cmag):
         self.c.r = cmag * np.cos(np.radians(alpha))
         self.c.theta = cmag * np.sin(np.radians(alpha))
-        self.c.vec = np.append(self.c.r, self.c.theta)
+        self.c.set_vector_with_components()
         self.set_w_with_c_u()
+
+    def set_state_beta_wmag(self, beta,wmag):
+        self.w.r = wmag * np.cos(np.radians(beta))
+        self.w.theta = wmag * np.sin(np.radians(beta))
+        self.w.set_vector_with_components()
+        # self.c.vec = np.append(self.c.r, self.c.theta)
+        self.set_c_with_w_u()
 
     def set_w_with_c_u(self):
         self.w.vec = np.subtract(self.c.vec, self.u.vec)
@@ -64,3 +75,13 @@ class KinematicState():
         ax.quiver(origin[0], origin[1],
                   self.c.r, self.c.theta,
                   color='r', scale=1, angles='xy', scale_units="xy")
+
+
+    def get_kinematic_info(self):
+
+        return dict({
+               "alpha": self.alpha,
+               "beta": self.beta,
+               "w": self.w.get_velocity_info(),
+               "u": self.u.get_velocity_info(),
+               "c": self.c.get_velocity_info()})

@@ -36,9 +36,13 @@ class ThermodynamicState():
         self.set_staticHS(hstatic, self.total.S)
 
     def set_static_htotal_c_p(self,c,P):
-        hstatic = self.total.H - (c ** 2) / 2
+        hstatic = self.total.H - (c**2)/2
         self.set_staticHP(hstatic, P)
         self.set_totalHS(self.total.H, self.static.S)
+
+
+
+
 
     def set_total_with_etatotal_statetotal_ptotal(self, etatotal, statetotal_in, ptotal_out):
         htotal_s_out = PropsSI('H', 'S', statetotal_in.S,'P', ptotal_out, self.fluid)
@@ -49,8 +53,10 @@ class ThermodynamicState():
         hstatic_s_out = PropsSI('H', 'S', statetotal_in.S, 'P', pstatic_out, self.fluid)
         htotal_out = statetotal_in.H - etastatic * (statetotal_in.H - hstatic_s_out)
         self.total.H = htotal_out
+        self.static.P = pstatic_out
 
-
+    def get_thermodynamic_info(self):
+        return dict({"static":self.static.get_properties_info(),"total": self.total.get_properties_info()})
 
 class ThermodynamicProperties():
     def __init__(self, fluid="Toluene", H=0, S=0, T=0, P=0, D=0, A=0):
@@ -67,18 +73,24 @@ class ThermodynamicProperties():
         self.T = PropsSI('T', 'H', self.H, 'P', self.P, self.fluid)
         self.D = PropsSI('D', 'H', self.H, 'P', self.P, self.fluid)
         self.S = PropsSI('S', 'H', self.H, 'P', self.P, self.fluid)
-        self.A = PropsSI('A', 'H', self.H, 'P', self.P, self.fluid)
+        # self.A = PropsSI('A', 'H', self.H, 'P', self.P, self.fluid)
     def set_statePT(self, P, T):
         self.P = P
         self.T = T
         self.H = PropsSI('H', 'T', self.T, 'P', self.P, self.fluid)
         self.D = PropsSI('D', 'T', self.T, 'P', self.P, self.fluid)
         self.S = PropsSI('S', 'T', self.T, 'P', self.P, self.fluid)
-        self.A = PropsSI('A', 'T', self.T, 'P', self.P, self.fluid)
+        # self.A = PropsSI('A', 'T', self.T, 'P', self.P, self.fluid)
     def set_stateHS(self, H,S):
         self.H=H
         self.S=S
         self.T = PropsSI('T', 'H', self.H, 'S', self.S, self.fluid)
         self.P = PropsSI('P', 'H', self.H, 'S', self.S, self.fluid)
         self.D = PropsSI('D', 'H', self.H, 'S', self.S, self.fluid)
-        self.A = PropsSI('A', 'H', self.H, 'S', self.S, self.fluid)
+        # self.A = PropsSI('A', 'H', self.H, 'S', self.S, self.fluid)
+
+    def get_properties_info(self):
+        return dict({"H":self.H,"S": self.S,"T": self.T,"P": self.P,"D": self.D, "A":self.A})
+
+    def set_speedofsound(self):
+        self.A = PropsSI('A', 'H', self.H, 'P', self.P, self.fluid)
