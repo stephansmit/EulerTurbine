@@ -1,0 +1,5 @@
+#!/bin/bash
+#SBATCH -t 10:00:00
+#SBATCH -n 12
+
+python2 create_data.py 12

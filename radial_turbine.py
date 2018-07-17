@@ -1,7 +1,7 @@
 import numpy as np
 from turbine_state import TurbineState
 from scipy.optimize import minimize
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import collections
 
 
@@ -157,18 +157,18 @@ class RadialTurbine():
 
         print("--------------------------------------")
 
-    def draw_velocity_triangle(self):
-        originstatorinlet = [0, 0]
-        originrotorinlet = [150, 0]
-        originrotoroutlet = [300, 0]
-        fig, ax = plt.subplots()
-        self.state1.kinematic.draw_with_c(ax, originstatorinlet)
-        self.state2.kinematic.draw_with_c(ax, originrotorinlet)
-        self.state3.kinematic.draw_with_w(ax, originrotoroutlet)
-        ax.set_xlim([0, 1000])
-        ax.set_ylim([-500, 500])
-        plt.show()
-
+#    def draw_velocity_triangle(self):
+#        originstatorinlet = [0, 0]
+#        originrotorinlet = [150, 0]
+#        originrotoroutlet = [300, 0]
+#        fig, ax = plt.subplots()
+#        self.state1.kinematic.draw_with_c(ax, originstatorinlet)
+#        self.state2.kinematic.draw_with_c(ax, originrotorinlet)
+#        self.state3.kinematic.draw_with_w(ax, originrotoroutlet)
+#        ax.set_xlim([0, 1000])
+#        ax.set_ylim([-500, 500])
+#        plt.show()
+#
 
 
 

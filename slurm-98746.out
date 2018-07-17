@@ -1,0 +1,96 @@
+/home00/stephans/EulerTurbine/kinematic_state.py:53: RuntimeWarning: divide by zero encountered in double_scalars
+  self.c.mach = np.linalg.norm(self.c.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:54: RuntimeWarning: divide by zero encountered in double_scalars
+  self.w.mach = np.linalg.norm(self.w.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:53: RuntimeWarning: divide by zero encountered in double_scalars
+  self.c.mach = np.linalg.norm(self.c.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:54: RuntimeWarning: divide by zero encountered in double_scalars
+  self.w.mach = np.linalg.norm(self.w.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:53: RuntimeWarning: divide by zero encountered in double_scalars
+  self.c.mach = np.linalg.norm(self.c.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:54: RuntimeWarning: divide by zero encountered in double_scalars
+  self.w.mach = np.linalg.norm(self.w.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:53: RuntimeWarning: divide by zero encountered in double_scalars
+  self.c.mach = np.linalg.norm(self.c.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:54: RuntimeWarning: divide by zero encountered in double_scalars
+  self.w.mach = np.linalg.norm(self.w.vec)/A
+/home00/stephans/EulerTurbine/velocity_vector.py:32: RuntimeWarning: invalid value encountered in sqrt
+  self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
+/home00/stephans/EulerTurbine/kinematic_state.py:53: RuntimeWarning: divide by zero encountered in double_scalars
+  self.c.mach = np.linalg.norm(self.c.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:54: RuntimeWarning: divide by zero encountered in double_scalars
+  self.w.mach = np.linalg.norm(self.w.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:53: RuntimeWarning: divide by zero encountered in double_scalars
+  self.c.mach = np.linalg.norm(self.c.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:54: RuntimeWarning: divide by zero encountered in double_scalars
+  self.w.mach = np.linalg.norm(self.w.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:53: RuntimeWarning: divide by zero encountered in double_scalars
+  self.c.mach = np.linalg.norm(self.c.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:54: RuntimeWarning: divide by zero encountered in double_scalars
+  self.w.mach = np.linalg.norm(self.w.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:53: RuntimeWarning: divide by zero encountered in double_scalars
+  self.c.mach = np.linalg.norm(self.c.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:54: RuntimeWarning: divide by zero encountered in double_scalars
+  self.w.mach = np.linalg.norm(self.w.vec)/A
+/home00/stephans/EulerTurbine/radial_turbine.py:85: RuntimeWarning: invalid value encountered in sqrt
+  w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2)/2))
+/home00/stephans/EulerTurbine/kinematic_state.py:53: RuntimeWarning: divide by zero encountered in double_scalars
+  self.c.mach = np.linalg.norm(self.c.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:54: RuntimeWarning: divide by zero encountered in double_scalars
+  self.w.mach = np.linalg.norm(self.w.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:53: RuntimeWarning: divide by zero encountered in double_scalars
+  self.c.mach = np.linalg.norm(self.c.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:54: RuntimeWarning: divide by zero encountered in double_scalars
+  self.w.mach = np.linalg.norm(self.w.vec)/A
+/home00/stephans/EulerTurbine/radial_turbine.py:85: RuntimeWarning: invalid value encountered in sqrt
+  w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2)/2))
+/home00/stephans/EulerTurbine/kinematic_state.py:53: RuntimeWarning: divide by zero encountered in double_scalars
+  self.c.mach = np.linalg.norm(self.c.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:54: RuntimeWarning: divide by zero encountered in double_scalars
+  self.w.mach = np.linalg.norm(self.w.vec)/A
+/home00/stephans/EulerTurbine/radial_turbine.py:85: RuntimeWarning: invalid value encountered in sqrt
+  w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2)/2))
+/home00/stephans/EulerTurbine/kinematic_state.py:53: RuntimeWarning: divide by zero encountered in double_scalars
+  self.c.mach = np.linalg.norm(self.c.vec)/A
+/home00/stephans/EulerTurbine/kinematic_state.py:54: RuntimeWarning: divide by zero encountered in double_scalars
+  self.w.mach = np.linalg.norm(self.w.vec)/A
+/home00/stephans/EulerTurbine/radial_turbine.py:85: RuntimeWarning: invalid value encountered in sqrt
+  w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2)/2))
+/home00/stephans/EulerTurbine/radial_turbine.py:85: RuntimeWarning: invalid value encountered in sqrt
+  w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2)/2))
+/home00/stephans/EulerTurbine/velocity_vector.py:32: RuntimeWarning: invalid value encountered in sqrt
+  self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
+/home00/stephans/EulerTurbine/radial_turbine.py:85: RuntimeWarning: invalid value encountered in sqrt
+  w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2)/2))
+/home00/stephans/EulerTurbine/velocity_vector.py:32: RuntimeWarning: invalid value encountered in sqrt
+  self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
+/home00/stephans/EulerTurbine/velocity_vector.py:32: RuntimeWarning: invalid value encountered in sqrt
+  self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
+/home00/stephans/EulerTurbine/radial_turbine.py:85: RuntimeWarning: invalid value encountered in sqrt
+  w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2)/2))
+/home00/stephans/EulerTurbine/velocity_vector.py:32: RuntimeWarning: invalid value encountered in sqrt
+  self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
+/home00/stephans/EulerTurbine/radial_turbine.py:85: RuntimeWarning: invalid value encountered in sqrt
+  w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2)/2))
+/home00/stephans/EulerTurbine/velocity_vector.py:32: RuntimeWarning: invalid value encountered in sqrt
+  self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
+/home00/stephans/EulerTurbine/radial_turbine.py:85: RuntimeWarning: invalid value encountered in sqrt
+  w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2)/2))
+/home00/stephans/EulerTurbine/velocity_vector.py:32: RuntimeWarning: invalid value encountered in sqrt
+  self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
+/home00/stephans/EulerTurbine/radial_turbine.py:85: RuntimeWarning: invalid value encountered in sqrt
+  w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2)/2))
+/home00/stephans/EulerTurbine/radial_turbine.py:85: RuntimeWarning: invalid value encountered in sqrt
+  w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2)/2))
+/home00/stephans/EulerTurbine/velocity_vector.py:32: RuntimeWarning: invalid value encountered in sqrt
+  self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
+/home00/stephans/EulerTurbine/velocity_vector.py:32: RuntimeWarning: invalid value encountered in sqrt
+  self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
+/home00/stephans/EulerTurbine/velocity_vector.py:32: RuntimeWarning: invalid value encountered in sqrt
+  self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
+/home00/stephans/EulerTurbine/radial_turbine.py:85: RuntimeWarning: invalid value encountered in sqrt
+  w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2)/2))
+/home00/stephans/EulerTurbine/velocity_vector.py:32: RuntimeWarning: invalid value encountered in sqrt
+  self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
+/home00/stephans/EulerTurbine/velocity_vector.py:32: RuntimeWarning: invalid value encountered in sqrt
+  self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
