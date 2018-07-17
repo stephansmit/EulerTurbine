@@ -102,8 +102,8 @@ class RadialTurbine():
         return
 
     def set_work_velocity(self):
-        self.work_velocity = self.state2.kinematic.u.theta*self.state2.kinematic.c.theta - \
-            abs(self.state3.kinematic.u.theta*self.state3.kinematic.c.theta)
+        self.work_velocity = self.state2.kinematic.u.theta*self.state2.kinematic.c.theta + \
+            self.state3.kinematic.u.theta*self.state3.kinematic.c.theta
         return
 
     def calc_DOR_velocity(self):

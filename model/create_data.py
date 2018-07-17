@@ -103,15 +103,15 @@ if __name__=="__main__":
     df_omega = pd.DataFrame()
     df_h3 = pd.DataFrame()
 
-    df_DOR['DOR'] = np.linspace(0,0.8,20)
+    df_DOR['DOR'] = np.linspace(0,0.8,1)
     df_DOR['key'] = 1
-    df_h2['h2'] = np.linspace(5e-3, 9e-3,5)
+    df_h2['h2'] = np.linspace(5e-3, 9e-3,1)
     df_h2['key']=1
-    df_alpha2['alpha2'] = np.linspace(70, 80,5)
+    df_alpha2['alpha2'] = np.linspace(70, 80,1)
     df_alpha2['key']=1
-    df_omega['omega']=np.linspace(2600,4600, 20)
+    df_omega['omega']=np.linspace(2600,4600, 1)
     df_omega['key']=1
-    df_h3['h3'] = np.linspace(1e-2,10e-2, 5)
+    df_h3['h3'] = np.linspace(1e-2,10e-2, 1)
     df_h3['key']=1
 
     df1 = pd.merge(df_DOR, df_omega, on='key')
@@ -131,4 +131,4 @@ if __name__=="__main__":
     
     dfturbine = parallelized_getRadialTurbineInfo(df, ncores)
     dfplot = dfturbine.dropna()
-    dfplot.to_csv("EulerTurbineData.txt", sep='\t', index=False)
+    dfplot.to_csv("../data/EulerTurbineData.txt", sep='\t', index=False)

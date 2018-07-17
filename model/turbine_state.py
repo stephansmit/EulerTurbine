@@ -31,8 +31,8 @@ class TurbineState():
 
 
     def set_htotal_work(self):
-        work = self.previous_state.kinematic.c.theta*self.previous_state.kinematic.u.theta - \
-               abs(self.kinematic.c.theta*self.kinematic.u.theta)
+        work = self.previous_state.kinematic.c.theta*self.previous_state.kinematic.u.theta + \
+               self.kinematic.c.theta*self.kinematic.u.theta
         ho3 = self.previous_state.thermodynamic.total.H - work
         # print(ho3)
         self.thermodynamic.set_totalHS(ho3, self.thermodynamic.static.S)
@@ -132,12 +132,11 @@ class TurbineState():
         print("Absolute Velocity: " + str([self.kinematic.c.theta, self.kinematic.c.r]))
         print("Mag Relative Velocity: "  +str(self.kinematic.w.mag))
         print("Relative Velocity: "  +str([self.kinematic.w.theta, self.kinematic.w.r]))
+        print("Angular Velocity: " + str([self.kinematic.u.theta, self.kinematic.u.r]))
         print("Absolute Angle: "+ str(self.kinematic.alpha))
         print("Relative Angle: " +str(self.kinematic.beta))
         print("Absolute Mach: " + str(self.kinematic.c.mach))
         print("Relative Mach: " + str(self.kinematic.w.mach))
-        print("Mag Rotational Velocity: " + str(self.kinematic.u.mag))
-        print("Rotational Velocity: "+str(self.kinematic.u.vec))
         print("")
         print("Massflow: "+ str(self.massflow))
         print("Area: "+ str(self.area))

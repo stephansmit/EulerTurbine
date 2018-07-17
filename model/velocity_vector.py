@@ -15,7 +15,7 @@ class VelocityVector():
         self.r = self.vec[0]
         self.theta = self.vec[1]
         self.mag = np.sqrt(self.vec[0]**2 + self.vec[1]**2)
-        self.angle = np.degrees(np.arctan(self.theta / self.r))
+        self.angle = np.degrees(np.arctan(self.r/ self.theta))
 
     def set_vector_with_components(self):
         self.vec = np.array([self.r, self.theta])
