@@ -110,7 +110,7 @@ if __name__=="__main__":
     df_h2['key']=1
     df_alpha2['alpha2'] = np.linspace(70, 80,5)
     df_alpha2['key']=1
-    df_omega['omega']=np.linspace(2600,3200, 5)
+    df_omega['omega']=np.linspace(2600,3600, 10)
     df_omega['key']=1
     df_h3['h3'] = np.linspace(1e-2,5e-2, 5)
     df_h3['key']=1
@@ -132,4 +132,4 @@ if __name__=="__main__":
     
     dfturbine = parallelized_getRadialTurbineInfo(df, ncores)
     dfplot = dfturbine.dropna()
-    dfplot.to_csv("EulerTurbineData.txt", sep='\t')
+    dfplot.to_csv("EulerTurbineData.txt", sep='\t', index=False)
