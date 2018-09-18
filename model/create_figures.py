@@ -207,7 +207,8 @@ if __name__=="__main__":
                                       dfturbine['state3_kinematic_u_mag']*dfturbine['state3_kinematic_u_mag'])/1000.
     dfturbine['state3_kinematic_ske']=0.5*dfturbine['state3_thermodynamic_static_D']*dfturbine['state3_kinematic_c_mag']*dfturbine['state3_kinematic_c_mag']/1000.0
     dfturbine['state2_kinematic_ske']=0.5*dfturbine['state3_thermodynamic_static_D']*dfturbine['state2_kinematic_c_mag']*dfturbine['state2_kinematic_c_mag']/1000.0
-    
+    dfturbine['ratio']=dfturbine['centrifugalterm']/(dfturbine['state2_thermodynamic_static_H']-dfturbine['state3_thermodynamic_static_H'])
+
     
     
     #vectors used for filtering
@@ -235,7 +236,7 @@ if __name__=="__main__":
     h3=h3_vec2[3]
     alpha2=alpha2_vec[0]
     zeta3= zeta3_vec2[0]
-    plotContour=False
+    plotContour=True
     if plotContour:
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "tsefficiency",
@@ -262,6 +263,13 @@ if __name__=="__main__":
                       "state1_kinematic_alpha", alpha1_vec[0],
                       figpath_notopti,"P3alpha2_beta", 30
                       )
+	 plot_contour(dfnotopti,
+              "omegaHz", "state3_thermodynamic_static_P", "ratio",
+              "state2_kinematic_alpha", alpha2,
+              "state3_height", h3,
+              "state3_kinematic_zeta", zeta3,
+              figpath_notopti, "omegaP3_ratio", 30
+              )
          plot_contour(dfnotopti,
                       "omegaHz", 
                       "state3_thermodynamic_static_P", 

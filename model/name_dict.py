@@ -309,6 +309,13 @@ namedictionary = {
         "formula": r'dont know', 
         "longname": "Centrifugal term in conservation rothalpy", 
         "units" : r'[$\displaystyle KJ/kg$]'
+    },
+    "ratio": {
+        'shortname': 'Ratio Centrifugal/Enthalpy', 
+        "symbol": r'$\displaystyle \frac{\frac{U_{2}^2}{2}-\frac{U_{3}^2}{2}}{h_2-h_3}$',
+        "formula": r'dont know', 
+        'longname': 'Ratio Centrifugal force and Enthalpy drop', 
+        "units" : r'[$\displaystyle -$]'
     }
     
     
