@@ -24,8 +24,10 @@ class ThermodynamicState():
     def set_totalHP(self, H, P ):
         self.total.set_stateHP(H,P)
 
+    def set_staticPS(self, P,S):
+        self.static.set_statePS(P,S)
     def get_c_static_total(self):
-        return np.sqrt(self.total.H - self.static.H)*2
+        return np.sqrt(2*(self.total.H - self.static.H))
 
     def set_total_static_c(self, c):
         htotal = self.static.H + (c**2)/2
@@ -39,8 +41,6 @@ class ThermodynamicState():
         hstatic = self.total.H - (c**2)/2
         self.set_staticHP(hstatic, P)
         self.set_totalHS(self.total.H, self.static.S)
-
-
 
 
 
@@ -88,6 +88,12 @@ class ThermodynamicProperties():
         self.P = PropsSI('P', 'H', self.H, 'S', self.S, self.fluid)
         self.D = PropsSI('D', 'H', self.H, 'S', self.S, self.fluid)
         # self.A = PropsSI('A', 'H', self.H, 'S', self.S, self.fluid)
+    def set_statePS(self,P,S):
+        self.P = P
+        self.S = S
+        self.T = PropsSI('T', 'P', self.P, 'S', self.S, self.fluid)
+        self.H = PropsSI('H', 'P', self.P, 'S', self.S, self.fluid)
+        self.D = PropsSI('D', 'P', self.P, 'S', self.S, self.fluid)
 
     def get_properties_info(self):
         return dict({"H":self.H,"S": self.S,"T": self.T,"P": self.P,"D": self.D, "A":self.A})

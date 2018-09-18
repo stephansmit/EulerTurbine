@@ -3,51 +3,61 @@ from turbine_state import TurbineState
 from scipy.optimize import minimize
 #import matplotlib.pyplot as plt
 import collections
-
+import math
 
 class RadialTurbine():
-    def __init__(self, omega, h1, h2, h3, r1, r2, r3, P1, T1, C1, alpha1, alpha2, P3, DOR):
+    def __init__(self, hz, h1, h2, h3, r1, r2, r3, P01, T01, alpha1, alpha2, zeta3, P3, massflow, optimizedh):
 
+        omega = hz*2*math.pi
+        self.optimized = optimizedh
+        self.desired_massflow = massflow
         self.states = []
         self.omega = omega
         self.state1 = TurbineState(0, r1, h1)
-        self.state1.thermodynamic.set_staticPT(P1, T1)
-        self.state1.thermodynamic.set_total_static_c(C1)
-        self.state1.kinematic.set_state_alpha_cmag(alpha1, C1)
-        self.state1.set_massflow()
-        self.state1.kinematic.set_mach_numbers(self.state1.thermodynamic.static.A)
-
+        self.state1.thermodynamic.set_totalPT(P01,T01)
+        minimize(self.calc_static_given_massflow_alpha1, 0.001, args=(alpha1))
 
         self.state2 = TurbineState(omega, r2, h2)
         self.state2.set_previous(self.state1)
         self.state2.set_first(self.state1)
-        self.state3 = TurbineState(omega, r3, h3)
-        self.state3.set_previous(self.state2)
-        self.state3.set_first(self.state1)
 
         self.state2.thermodynamic.set_total_with_etatotal_statetotal_ptotal(1.0,
                                                                             self.state1.thermodynamic.total,
                                                                             self.state1.thermodynamic.total.P)
+        self.state2.massflow = self.state1.massflow
 
+        minimize(self.calc_P2_given_massflow_alpha2, 0.01e5, args=(alpha2, self.state2.thermodynamic.total.S), method='Nelder-Mead' )
 
+        self.state2.set_rothalpy()
 
-        #determine total enthalpy
-        # self.state3.thermodynamic.total.H = self.state2.thermodynamic.total.H -10000
-        # self.state3.thermodynamic.set_htotal_with_etastatic_statetotal_pstatic(etats,
-        #                                                                        self.state1.thermodynamic.total,
-        #                                                                        P3)
+        self.state3 = TurbineState(omega, r3, h3)
+        self.state3.massflow = self.state1.massflow
 
+        self.state2.set_next(self.state3)
+        self.state3.set_previous(self.state2)
+        self.state3.set_first(self.state1)
 
-        c0 = 470
-        c2 = c0
-        #set total and static conditions using assumption
+        self.state3.kinematic.zeta = zeta3
+        self.state3.thermodynamic.set_staticPS(P3, self.state2.thermodynamic.static.S)
+        w3 = np.sqrt(2 * (self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.theta ** 2) / 2))
+        #w3thetar = w3 * np.cos(np.radians(zeta3))
 
+        if self.optimized:
+            cmag = np.sqrt(w3**2-self.state3.kinematic.u.mag**2)
+            self.state3.kinematic.set_state_alpha_cmag(0.0,cmag )
+            h3= self.state3.massflow/(self.state3.kinematic.c.mag*self.state3.thermodynamic.static.D*self.state3.circumferential)
+            self.state3.set_area_h(h3)
+        else:
+            c3r = self.state1.massflow / (self.state3.thermodynamic.static.D * self.state3.area)
+            self.state3.kinematic.w.set_vector_with_rcomponent_mag(c3r, w3)
+            self.state3.kinematic.set_c_with_w_u()
 
-        minimize(self.calc_error, c0, args=(alpha2, P3, DOR))
+        self.state3.thermodynamic.total.H = self.state2.rothalpy + self.state3.kinematic.u.theta * self.state3.kinematic.c.theta
+        self.state3.thermodynamic.set_totalHS(self.state3.thermodynamic.total.H, self.state3.thermodynamic.static.S)
 
-
-
-
+        self.state3.set_massflow()
+        self.state1.set_rothalpy()
+        self.state3.set_rothalpy()
 
         self.states.append(self.state1)
         self.states.append(self.state2)
@@ -56,78 +66,109 @@ class RadialTurbine():
             i.kinematic.set_angles()
             i.thermodynamic.static.set_speedofsound()
             i.kinematic.set_mach_numbers(i.thermodynamic.static.A)
-        #state2 = TurbineState(omega, r2, h2)
-        #state2.set_previous(state1)
-        self.calc_DOR_velocity()
+
         self.calc_DOR_velocity2()
         self.calc_DOR_enthalpy()
         self.set_work_enthalpy()
         self.set_work_velocity()
+        self.calc_hdiff()
+
+    # def calc_error3(self,h3):
+    #     h2 = h2[0]
+    #     self.state2.set_area_h(h2)
+    #     self.state2.set_massflow()
+    #     return (self.state2.massflow - self.state1.massflow)**2
+    #
+    def calc_static_given_massflow_alpha1(self,c1, alpha1):
+        c1 = c1[0]
+        self.state1.kinematic.set_state_alpha_cmag(alpha1, c1)
+        self.state1.thermodynamic.set_static_total_c(c1)
+        self.state1.set_massflow()
+        return (self.desired_massflow - self.state1.massflow)**2
+
+    def calc_P2_given_massflow_alpha2(self,P2, alpha2, s2):
+        p2 = P2[0]
+        self.state2.thermodynamic.set_staticPS(p2,s2)
+        cmag = self.state2.thermodynamic.get_c_static_total()
+        self.state2.kinematic.set_state_alpha_cmag(alpha2, cmag)
+        massflow = self.state2.area*self.state2.thermodynamic.static.D*self.state2.kinematic.c.r
+        return (self.state2.massflow-massflow)**2
+
+    def calc_H3_setting_alpha3tozero(self,H3):
+        h3=H3[0]
+        self.state3.set_area_h(h3)
+        minimize(self.calc_P3_rothalpy, [.1e5], args=(self.state1.thermodynamic.static.S), method='Nelder-Mead')
+        # c3r = self.state1.massflow/(self.state3.thermodynamic.static.D*self.state3.area)
+        # self.state3.kinematic.w.set_vector_with_rcomponent_mag(c3r, w3thetar)
+        # self.state3.kinematic.set_c_with_w_u()
+        self.state3.kinematic.set_angles()
+        return (self.state3.kinematic.alpha)**2
+
+    def calc_P3_rothalpy(self,P3, s3):
+        p3=P3[0]
+        #calc static conditions
+        self.state3.thermodynamic.set_staticPS(p3,s3)
+        #calc mag. relative velocity
+        w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.theta**2)/2))
+        #calc radial component
+        c3r = self.state1.massflow / (self.state3.thermodynamic.static.D * self.state3.area)
+        self.state3.kinematic.w.set_vector_with_rcomponent_mag(c3r, w3)
+        self.state3.kinematic.set_c_with_w_u()
+        h03 = self.state3.thermodynamic.static.H +0.5*self.state3.kinematic.c.mag**2
+        #self.state3.thermodynamic.total.H = self.state2.thermodynamic.total.H - \
+        #                                    (self.state2.kinematic.c.theta * self.state2.kinematic.u.theta-
+        #                                    self.state3.kinematic.c.theta *self.state3.kinematic.u.theta)
+        self.state3.thermodynamic.total.H = self.state2.rothalpy + self.state3.kinematic.c.theta*self.state3.kinematic.u.theta
+
+        print(h03)
+        print(self.state3.thermodynamic.total.H)
+        return (self.state3.thermodynamic.total.H-h03)**2
+
+
+    def calc_error2(self,h2):
+        h2 = h2[0]
+        self.state2.set_area_h(h2)
+        self.state2.set_massflow()
+        return (self.state2.massflow - self.state1.massflow)**2
 
     def calc_error(self,c, alpha2, P3, DOR):
-        #assume c2
-
         c2 = c[0]
-        #set total and static conditions using assumption
-
         self.state2.kinematic.set_state_alpha_cmag(alpha2, c2)
         self.state2.thermodynamic.set_static_total_c(c2)
         self.state2.set_rothalpy()
-
-        #set static properties with DOR and P3
-        self.state3.set_static_dor_pstatic(DOR, P3)
-        self.print_stages()
-
-        #calculate radial absolute velocity using massflow
-        c3r = self.state1.massflow/(self.state3.thermodynamic.static.D*self.state3.area)
-        #using conservation of rothalpy calculate w3
-        # print(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2/2))
-        w3 = np.sqrt(2*(self.state2.rothalpy - self.state3.thermodynamic.static.H + (self.state3.kinematic.u.mag**2)/2))
-        #make velocity triangle
-        self.state3.kinematic.w.set_vector_with_rcomponent_mag(c3r, w3)
-        self.state3.kinematic.set_c_with_w_u()
-
-        #calculate total conditions using velocity triangle and static
-        self.state3.set_htotal_work()
-        # self.state3.thermodynamic.set_total_static_c(self.state3.kinematic.c.mag)
-
         self.state2.set_massflow()
-        self.state3.set_massflow()
-        self.state1.set_rothalpy()
-        self.state3.set_rothalpy()
         return (self.state2.massflow - self.state1.massflow)**2
 
     def set_work_enthalpy(self):
-        self.work_enthalpy = self.state2.thermodynamic.total.H -self.state3.thermodynamic.total.H
+        self.work_enthalpy = self.state2.thermodynamic.total.H - self.state3.thermodynamic.total.H
         return
 
     def set_work_velocity(self):
-        self.work_velocity = self.state2.kinematic.u.theta*self.state2.kinematic.c.theta + \
-            self.state3.kinematic.u.theta*self.state3.kinematic.c.theta
-        return
+        # if self.state3.kinematic.c.theta > 0:
+            self.work_velocity = self.state2.kinematic.u.theta*self.state2.kinematic.c.theta - \
+                self.state3.kinematic.u.theta*self.state3.kinematic.c.theta
+        # else:
+        #     self.work_velocity = self.state2.kinematic.u.theta * self.state2.kinematic.c.theta + \
+        #                          self.state3.kinematic.u.theta * self.state3.kinematic.c.theta
+        #
+        # return
 
-    def calc_DOR_velocity(self):
-        self.DOR_velocity = (self.state3.kinematic.w.theta ** 2 - self.state2.kinematic.w.theta ** 2
-                    - self.state3.kinematic.u.theta ** 2 + self.state2.kinematic.u.theta ** 2
-                    ) / \
-                   (self.state2.kinematic.c.theta ** 2 - self.state1.kinematic.c.theta ** 2
-                    + self.state3.kinematic.w.theta ** 2 - self.state2.kinematic.w.theta ** 2
-                    - self.state3.kinematic.u.theta ** 2 + self.state2.kinematic.u.theta ** 2
-                    )
-        return
 
+
+
+    def calc_hdiff(self):
+        self.hdiff = self.state2.kinematic.u.theta*self.state2.kinematic.omega - self.state3.kinematic.u.theta*self.state2.kinematic.omega
     def calc_DOR_velocity2(self):
-        self.DOR_velocity2 = (self.state3.kinematic.w.mag**2 -
-                             self.state2.kinematic.w.mag**2 -
-                             self.state3.kinematic.u.mag**2 +
-                             self.state2.kinematic.u.mag**2)/ \
-                             (self.state2.kinematic.c.mag**2 -
-                              self.state1.kinematic.c.mag**2 +
-                              self.state3.kinematic.w.mag ** 2 -
-                              self.state2.kinematic.w.mag ** 2 -
-                              self.state3.kinematic.u.mag ** 2 +
-                              self.state2.kinematic.u.mag ** 2
-
+        self.DOR_velocity2 = ( self.state3.kinematic.w.mag**2
+                              -self.state2.kinematic.w.mag**2
+                              -self.state3.kinematic.u.mag**2 +
+                              +self.state2.kinematic.u.mag**2)/\
+                             ( self.state2.kinematic.c.mag**2
+                              -self.state1.kinematic.c.mag**2
+                              +self.state3.kinematic.w.mag ** 2
+                              -self.state2.kinematic.w.mag ** 2
+                              -self.state3.kinematic.u.mag ** 2
+                              +self.state2.kinematic.u.mag ** 2
                               )
         return
     def calc_DOR_enthalpy(self):
@@ -149,11 +190,13 @@ class RadialTurbine():
 
     def print_turbine(self):
         print("--------------------------------------")
-        print("DOR velocity: " + str(    self.DOR_velocity))
         print("DOR velocity2: " + str(    self.DOR_velocity2))
         print("DOR enthalpy: " + str(    self.DOR_enthalpy))
-        print("Work velocity: " + str(self.work_velocity))
+        print("HDIFF: " + str(self.hdiff))
+        print("Rotational speed: " + str(self.omega))
         print("Work enthalpy: " + str(self.work_enthalpy))
+        print("Work velocity: " + str(self.work_velocity))
+        print("test: " +str(self.state3.thermodynamic.static.H+0.5*self.state3.kinematic.c.mag**2))
 
         print("--------------------------------------")
 
@@ -174,6 +217,7 @@ class RadialTurbine():
 
     def get_turbine_info(self):
         return self.flatten(dict({
+               "optimized": self.optimized,
                "R": self.DOR_enthalpy,
                "omega": self.omega,
                "work": self.work_enthalpy,
@@ -192,7 +236,7 @@ class RadialTurbine():
                 items.append((new_key, v))
         return dict(items)
 
-column_names = [u'R', u'state1_area', u'state1_height', u'state1_kinematic_alpha',
+column_names = [u'R', u'omega', u'state1_area', u'state1_height', u'state1_kinematic_alpha',
        u'state1_kinematic_beta', u'state1_kinematic_c_mag',
        u'state1_kinematic_c_r', u'state1_kinematic_c_theta',
        u'state1_kinematic_u_mag', u'state1_kinematic_u_r',

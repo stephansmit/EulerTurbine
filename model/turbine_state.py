@@ -8,20 +8,25 @@ class TurbineState():
     def __init__(self, omega, r,h):
         self.thermodynamic = ThermodynamicState()
         self.kinematic = KinematicState(omega, r)
-        self.area = 2*pi *r*h
+        self.circumferential =2*pi*r
+        self.area = self.circumferential*h
         self.height = h
         self.radius = r
         self.massflow = 0
         self.rothalpy = 0
 
 
-
+    def set_area_h(self,h):
+        self.area = 2*pi *self.radius*h
+        self.height = h
 
     def set_massflow(self):
         self.massflow = self.area*self.thermodynamic.static.D*self.kinematic.c.r
 
     def set_rothalpy(self):
         self.rothalpy = self.thermodynamic.static.H + (self.kinematic.w.mag**2)/2 -(self.kinematic.u.mag**2)/2
+        # self.rothalpy = self.thermodynamic.static.H + (self.kinematic.c.mag**2)/2 - self.kinematic.u.theta * self.kinematic.c.theta
+        # self.rothalpy = self.thermodynamic.total.H - self.kinematic.u.theta*self.kinematic.c.theta
 
     def set_previous(self, state_in):
         self.previous_state=state_in
@@ -29,23 +34,37 @@ class TurbineState():
     def set_first(self, state_first):
         self.first_state=state_first
 
+    def set_next(self,state_next):
+        self.next_state = state_next
+
 
     def set_htotal_work(self):
-        work = self.previous_state.kinematic.c.theta*self.previous_state.kinematic.u.theta + \
+        if self.kinematic.c.theta > 0:
+            work = self.previous_state.kinematic.c.theta*self.previous_state.kinematic.u.theta - \
                self.kinematic.c.theta*self.kinematic.u.theta
+        else:
+            work = self.previous_state.kinematic.c.theta * self.previous_state.kinematic.u.theta + \
+                   self.kinematic.c.theta * self.kinematic.u.theta
         ho3 = self.previous_state.thermodynamic.total.H - work
         # print(ho3)
         self.thermodynamic.set_totalHS(ho3, self.thermodynamic.static.S)
 
 
-    def set_static_dor_pstatic(self, DOR, pstatic):
-        work = self.previous_state.thermodynamic.total.H - self.thermodynamic.total.H
-        h = (DOR*self.first_state.thermodynamic.static.H - self.previous_state.thermodynamic.static.H)/ \
-            (DOR-1.0)
+    def set_static_dor_sstatic_previous(self, DOR, sstatic):
+        # work = self.previous_state.thermodynamic.total.H - self.thermodynamic.total.H
+        h = (self.previous_state.thermodynamic.static.H- DOR*self.first_state.thermodynamic.static.H )/ \
+            (1.0-DOR)
 
-        self.thermodynamic.set_staticHP(h, pstatic)
+        self.thermodynamic.set_staticHS(h, sstatic)
 
-        # denom = work/DOR
+    def set_static_dor_sstatic_next(self, DOR, sstatic):
+        # work = self.previous_state.thermodynamic.total.H - self.thermodynamic.total.H
+        h = DOR *(self.first_state.thermodynamic.static.H - self.next_state.thermodynamic.static.H) + self.next_state.thermodynamic.static.H
+
+        self.thermodynamic.set_staticHS(h, sstatic)
+
+
+            # denom = work/DOR
         # w = np.sqrt(denom - (self.previous_state.kinematic.c.mag**2 - self.first_state.kinematic.c.mag**2)
         #            - (-self.previous_state.kinematic.w.mag**2)
         #            - (-self.kinematic.u.theta**2 + self.previous_state.kinematic.u.theta**2))
@@ -140,6 +159,10 @@ class TurbineState():
         print("")
         print("Massflow: "+ str(self.massflow))
         print("Area: "+ str(self.area))
+        print("Height: "+ str(self.height))
+        print("Radius: "+ str(self.radius))
+
+
 
     def get_turbinestate_info(self):
         return dict({"thermodynamic": self.thermodynamic.get_thermodynamic_info(),

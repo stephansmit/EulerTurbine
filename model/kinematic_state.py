@@ -8,6 +8,7 @@ class KinematicState():
         self.u = VelocityVector(omega, r)
         self.alpha = 0
         self.beta = 0
+        self.zeta = 0
         self.r = r
         self.omega = omega
 
@@ -44,6 +45,13 @@ class KinematicState():
         self.w.theta = self.w.r * np.tan(np.radians(beta))
         self.w.set_vector_with_components()
         self.set_c_with_w_u()
+
+    def set_state_alpha_cr(self, alpha, cr):
+        self.alpha = alpha
+        self.c.r = cr
+        self.c.theta = self.c.r * np.tan(np.radians(alpha))
+        self.c.set_vector_with_components()
+        self.set_w_with_c_u()
 
     def set_c_with_w_u(self):
         self.c.vec = np.add(self.w.vec, self.u.vec)
@@ -82,6 +90,8 @@ class KinematicState():
         return dict({
                "alpha": self.alpha,
                "beta": self.beta,
+               "zeta": self.zeta,
                "w": self.w.get_velocity_info(),
                "u": self.u.get_velocity_info(),
                "c": self.c.get_velocity_info()})
+
