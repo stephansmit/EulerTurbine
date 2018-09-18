@@ -190,8 +190,9 @@ if __name__=="__main__":
     #set path to write figures
     figpath_notopti= "/home/azureuser/Documents/EulerTurbine/results/variableh/figures/notoptimized/"
     figpath_opti = "/home/azureuser/Documents/EulerTurbine/results/variableh/figures/optimized/"
-    moviepath = "/home/azureuser/Documents/EulerTurbine/results/variableh/movies/"
-    
+    moviepath_opti = "/home/azureuser/Documents/EulerTurbine/results/variableh/movies/optimized/"
+    moviepath_notopti = "/home/azureuser/Documents/EulerTurbine/results/variableh/movies/notoptimized/"
+
     
     #read info
     dfturbine = pd.read_csv("/home/azureuser/Documents/EulerTurbine/data/EulerTurbineData.txt", sep='\t')
@@ -234,7 +235,7 @@ if __name__=="__main__":
     h3=h3_vec2[3]
     alpha2=alpha2_vec[0]
     zeta3= zeta3_vec2[0]
-    plotContour=True
+    plotContour=False
     if plotContour:
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "tsefficiency",
@@ -565,83 +566,102 @@ if __name__=="__main__":
                 "omegaHz", "state3_thermodynamic_static_P", "work","state2_kinematic_alpha", 
                 "state1_kinematic_alpha", alpha1_vec[0],
                 "state3_height", h3_vec2[4],
-                moviepath, "omegaP3_work_alpha2", 21
+                moviepath_notopti, "omegaP3_work_alpha2", 21
                 )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "R","state2_kinematic_alpha", 
                 "state1_kinematic_alpha", alpha1_vec[0],
                 "state2_height", h2_vec[0],
-                moviepath, "omegaP3_R_alpha2", 21
+                moviepath_notopti, "omegaP3_R_alpha2", 21
                 )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_c_mag","state3_height", 
                 "state2_kinematic_alpha", alpha2_vec[0],
                 "state2_height", h2_vec[0],
-                moviepath, "omegaP3_c3mag-height", 21
+                moviepath_notopti, "omegaP3_c3mag-height", 21
                 )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_c_mag","state3_height", 
                 "state2_kinematic_alpha", alpha2_vec[0],
                 "state2_height", h2_vec[0],
-                moviepath, "omegaP3_c3mag-height", 21
+                moviepath_notopti, "omegaP3_c3mag-height", 21
                 )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "tsefficiency","state3_height", 
                 "state2_kinematic_alpha", alpha2_vec[0],
                 "state2_height", h2_vec[0],
-                moviepath, "omegaP3_efficiency-height", 21
+                moviepath_notopti, "omegaP3_efficiency-height", 21
                 )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "R","state3_height", 
                 "state2_kinematic_alpha", alpha2_vec[0],
                 "state2_height", h2_vec[0],
-                moviepath, "omegaP3_R-height", 21
+                moviepath_notopti, "omegaP3_R-height", 21
                 )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "work","state3_height", 
                 "state2_kinematic_alpha", alpha2_vec[0],
                 "state2_height", h2_vec[0],
-                moviepath, "omegaP3_work-height", 21
+                moviepath_notopti, "omegaP3_work-height", 21
                 )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "state3_thermodynamic_static_D","state3_height", 
                 "state2_kinematic_alpha", alpha2_vec[0],
                 "state2_height", h2_vec[0],
-                moviepath, "omegaP3_D3-height", 21
+                moviepath_notopti, "omegaP3_D3-height", 21
                 )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_w_mag","state3_height", 
                 "state2_kinematic_alpha", alpha2_vec[0],
                 "state2_height", h2_vec[0],
-                moviepath, "omegaP3_w3mag-height", 21
+                moviepath_notopti, "omegaP3_w3mag-height", 21
                 )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_alpha","state3_height", 
                 "state2_kinematic_alpha", alpha2_vec[0],
                 "state2_height", h2_vec[0],
-                moviepath, "omegaP3_alpha3-height", 21
+                moviepath_notopti, "omegaP3_alpha3-height", 21
                 )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "state3_thermodynamic_static_H","state3_height", 
                 "state2_kinematic_alpha", alpha2_vec[-1],
                 "state2_height", h2_vec[0],
-                moviepath, "omegaP3_H3-height", 21
+                moviepath_notopti, "omegaP3_H3-height", 21
                 )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_ske","state3_height", 
                 "state2_kinematic_alpha", alpha2_vec[-1],
                 "state2_height", h2_vec[0],
-                moviepath, "omegaP3_ske3-height", 21
+                moviepath_notopti, "omegaP3_ske3-height", 21
                 )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "state3_thermodynamic_total_H","state3_height", 
                 "state2_kinematic_alpha", alpha2_vec[-1],
                 "state2_height", h2_vec[0],
-                moviepath, "omegaP3_H03-height", 21
+                moviepath_notopti, "omegaP3_H03-height", 21
                 )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_w_mag","state3_height", 
                 "state2_kinematic_alpha", alpha2_vec[-1],
                 "state2_height", h2_vec[0],
-                moviepath, "omegaP3_w3mag-height", 21
+                moviepath_notopti, "omegaP3_w3mag-height", 21
                 )
+
+
+
+
+
+
+    plot_contour_gif(dfopti, 
+                "omegaHz", "state3_thermodynamic_static_P", "work","state2_kinematic_alpha", 
+                "state1_kinematic_alpha", alpha1_vec[0],
+                "state2_height", h2_vec[0],
+                moviepath_opti, "omegaP3_work_alpha2", 21
+                )
+    plot_contour_gif(dfopti, 
+                "omegaHz", "state3_thermodynamic_static_P", "R","state2_kinematic_alpha", 
+                "state1_kinematic_alpha", alpha1_vec[0],
+                "state2_height", h2_vec[0],
+                moviepath_opti, "omegaP3_R_alpha2", 21
+                )
+
