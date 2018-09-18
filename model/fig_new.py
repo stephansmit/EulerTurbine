@@ -28,7 +28,7 @@ def filter_df_3cols(df, c1, f1,c2, f2,c3, f3):
     ]
 
 def scale_variables(df):
-    columns = {'work': 1e-3, "state2_area":1e6, "state3_area":1e6, "state3_height":1e3, "state2_height":1e3, "state3_thermodynamic_static_P":1e-5, }
+    columns = {'work': 1e-3, "state2_area":1e6, "state3_area":1e6, "state3_height":1e3, "state2_height":1e3, "state2_thermodynamic_static_P":1e-5,"state3_thermodynamic_static_P":1e-5,"state3_thermodynamic_total_H":1e-3, "state3_thermodynamic_static_H":1e-3, "state2_thermodynamic_static_H":1e-3}
     for col in columns:
         df[col]=df[col]*columns[col]
     return df
@@ -121,12 +121,13 @@ if __name__=="__main__":
     sys.path.append("/home/azureuser/Documents/EulerTurbine/model/")
     
     #set path to write figures
-    figpath = "/home/azureuser/Documents/EulerTurbine/results/variableh3new/figures/"
-    moviepath = "/home/azureuser/Documents/EulerTurbine/results/variableh3new/movies/"
+    figpath_notopti= "/home/azureuser/Documents/EulerTurbine/results/variableh/figures/notoptimized/"
+    figpath_opti = "/home/azureuser/Documents/EulerTurbine/results/variableh/figures/optimized/"
+    moviepath = "/home/azureuser/Documents/EulerTurbine/results/variableh/movies/"
     
     
     #read info
-    dfturbine = pd.read_csv("/home/azureuser/Documents/EulerTurbine/data/EulerTurbineData3.txt", sep='\t')
+    dfturbine = pd.read_csv("/home/azureuser/Documents/EulerTurbine/data/EulerTurbineData.txt", sep='\t')
     
     
     #create extra parameters
@@ -166,14 +167,14 @@ if __name__=="__main__":
     h3=h3_vec2[3]
     alpha2=alpha2_vec[0]
     zeta3= zeta3_vec2[0]
-    plot_contour=False
-    if plot_contour:
+    plotContour=True
+    if plotContour:
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "tsefficiency",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_eta", 30
+                      figpath_notopti, "omegaP3_eta", 30
                       )
          plot_contour(dfnotopti,
                       "state3_thermodynamic_static_P", 
@@ -182,7 +183,7 @@ if __name__=="__main__":
                       "omegaHz", omega_vec[3],
                       "state3_height", h3_vec2[1],
                       "state1_kinematic_alpha", alpha1_vec[0],
-                      figpath, "notoptimized_P3alpha2_R", 30
+                      figpath_notopti,"P3alpha2_R", 30
                       )
          plot_contour(dfnotopti,
                       "state3_thermodynamic_static_P", 
@@ -191,7 +192,7 @@ if __name__=="__main__":
                       "omegaHz", omega_vec[3],
                       "state3_height", h3_vec2[1],
                       "state1_kinematic_alpha", alpha1_vec[0],
-                      figpath, "notoptimized_P3alpha2_beta", 30
+                      figpath_notopti,"P3alpha2_beta", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", 
@@ -200,126 +201,126 @@ if __name__=="__main__":
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_R", 30
+                      figpath_notopti, "omegaP3_R", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_alpha",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_alpha3", 30
+                      figpath_notopti, "omegaP3_alpha3", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state2_thermodynamic_static_P", "state2_kinematic_w_mag",
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP2_w2mag", 30
+                      figpath_notopti, "omegaP2_w2mag", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state2_thermodynamic_static_P", "state2_kinematic_w_mach",
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP2_w2mach", 30
+                      figpath_notopti, "omegaP2_w2mach", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "work",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_work", 30
+                      figpath_notopti, "omegaP3_work", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_beta",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_beta3", 30
+                      figpath_notopti, "omegaP3_beta3", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_w_mag",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_w3mag", 30
+                      figpath_notopti, "omegaP3_w3mag", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_w_mach",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_w3mach", 30
+                      figpath_notopti, "omegaP3_w3mach", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state2_thermodynamic_static_P", "state2_kinematic_c_mag",
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP2_c2mag", 30
+                      figpath_notopti, "omegaP2_c2mag", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state2_thermodynamic_static_P", "state2_kinematic_c_mach",
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP2_c2mach", 30
+                      figpath_notopti, "omegaP2_c2mach", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "R",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_R", 30
+                      figpath_notopti, "omegaP3_R", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_c_mag",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_c3mag", 30
+                      figpath_notopti, "omegaP3_c3mag", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_c_mach",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_c3mach", 30
+                      figpath_notopti, "omegaP3_c3mach", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_ske",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_ske3", 30
+                      figpath_notopti, "omegaP3_ske3", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_thermodynamic_static_H",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_H3", 30
+                      figpath_notopti, "omegaP3_H3", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_thermodynamic_total_H",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_H03", 30
+                      figpath_notopti, "omegaP3_H03", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_thermodynamic_total_H",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_H03", 30
+                      figpath_notopti, "omegaP3_H03", 30
                       )
          plot_contour(dfnotopti,
                       "omegaHz", "state3_thermodynamic_static_P", "work",
                       "state2_kinematic_alpha", alpha2,
                       "state3_height", h3,
                       "state3_kinematic_zeta", zeta3,
-                      figpath, "notoptimized_omegaP3_work", 30
+                      figpath_notopti, "omegaP3_work", 30
                       )
 
 
@@ -328,7 +329,7 @@ if __name__=="__main__":
                   "state2_kinematic_alpha", alpha2_vec[0],
                   "state1_kinematic_alpha", alpha1_vec[0],
                   "state3_kinematic_zeta", zeta3_vec[0],
-                  figpath, "optimized_omegaP3_work", 30
+                  figpath_opti, "omegaP3_work", 30
                   )
 
          plot_contour(dfopti,
@@ -336,119 +337,119 @@ if __name__=="__main__":
                       "state3_thermodynamic_static_P", P3_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaalpha2_work", 30
+                      figpath_opti, "omegaalpha2_work", 30
                      )
          plot_contour(dfopti,
                       "omegaHz", "state2_thermodynamic_static_P", "work",
                       "state3_thermodynamic_static_P", P3_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP2_work", 30
+                      figpath_opti, "omegaP2_work", 30
                      )
          plot_contour(dfopti,
                       "omegaHz", "state2_thermodynamic_static_P", "state2_kinematic_c_mag",
                       "state3_thermodynamic_static_P", P3_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP2_c2mag", 30
+                      figpath_opti, "omegaP2_c2mag", 30
                      )
          plot_contour(dfopti,
                       "omegaHz", "state2_thermodynamic_static_P", "state2_kinematic_c_mach",
                       "state3_thermodynamic_static_P", P3_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP2_c2mach", 30
+                      figpath_opti, "omegaP2_c2mach", 30
                      )
          plot_contour(dfopti,
                       "omegaHz", "state2_thermodynamic_static_P", "state2_kinematic_c_theta",
                       "state3_thermodynamic_static_P", P3_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP2_c2theta", 30
+                      figpath_opti, "omegaP2_c2theta", 30
                      )
          plot_contour(dfopti,
                       "omegaHz", "state2_thermodynamic_static_P", "R",
                       "state3_thermodynamic_static_P", P3_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP2_R", 30
+                      figpath_opti, "omegaP2_R", 30
                      )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_height",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_height3", 30
+                      figpath_opti, "omegaP3_height3", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_w_mag",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_w3mag", 30
+                      figpath_opti, "omegaP3_w3mag", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_w_mach",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_w3mach", 30
+                      figpath_opti, "omegaP3_w3mach", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_c_mag",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_c3mag", 30
+                      figpath_opti, "omegaP3_c3mag", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_c_mach",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_c3mach", 30
+                      figpath_opti, "omegaP3_c3mach", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_c_r",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_c3r", 30
+                      figpath_opti, "omegaP3_c3r", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_beta",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_beta3", 30
+                      figpath_opti, "omegaP3_beta3", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "R",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_R", 30
+                      figpath_opti, "omegaP3_R", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_alpha",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_alpha3", 30
+                      figpath_opti, "omegaP3_alpha3", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_thermodynamic_static_D",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_D3", 30
+                      figpath_opti, "omegaP3_D3", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_thermodynamic_static_H",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_H3", 30
+                      figpath_opti, "omegaP3_H3", 30
                       )
          
          plot_contour(dfopti,
@@ -456,42 +457,42 @@ if __name__=="__main__":
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_cent", 30
+                      figpath_opti, "omegaP3_cent", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_thermodynamic_total_H",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_H03", 30
+                      figpath_opti, "omegaP3_H03", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "tsefficiency",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_eta", 30
+                      figpath_opti, "omegaP3_eta", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_ske",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_ske3", 30
+                      figpath_opti, "omegaP3_ske3", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_c_mag",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_c3mag", 30
+                      figpath_opti, "omegaP3_c3mag", 30
                       )
          plot_contour(dfopti,
                       "omegaHz", "state3_thermodynamic_static_P", "state3_kinematic_c_mach",
                       "state2_kinematic_alpha", alpha2_vec[0],
                       "state1_kinematic_alpha", alpha1_vec[0],
                       "state3_kinematic_zeta", zeta3_vec[0],
-                      figpath, "optimized_omegaP3_c3mach", 30
+                      figpath_opti, "omegaP3_c3mach", 30
                       )
     plot_contour_gif(dfnotopti, 
                 "omegaHz", "state3_thermodynamic_static_P", "work","state2_kinematic_alpha", 
