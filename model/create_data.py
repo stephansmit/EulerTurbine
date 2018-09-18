@@ -147,4 +147,4 @@ if __name__=="__main__":
     
     dfturbine = parallelized_getRadialTurbineInfo(df, ncores)
     dfplot = dfturbine.dropna()
-    dfplot.to_csv("../data/EulerTurbineData3.txt", sep='\t', index=False)
+    dfplot.to_csv("../data/EulerTurbineData.txt", sep='\t', index=False)
