@@ -51,27 +51,15 @@ class TurbineState():
 
 
     def set_static_dor_sstatic_previous(self, DOR, sstatic):
-        # work = self.previous_state.thermodynamic.total.H - self.thermodynamic.total.H
         h = (self.previous_state.thermodynamic.static.H- DOR*self.first_state.thermodynamic.static.H )/ \
             (1.0-DOR)
 
         self.thermodynamic.set_staticHS(h, sstatic)
 
     def set_static_dor_sstatic_next(self, DOR, sstatic):
-        # work = self.previous_state.thermodynamic.total.H - self.thermodynamic.total.H
         h = DOR *(self.first_state.thermodynamic.static.H - self.next_state.thermodynamic.static.H) + self.next_state.thermodynamic.static.H
 
         self.thermodynamic.set_staticHS(h, sstatic)
-
-
-            # denom = work/DOR
-        # w = np.sqrt(denom - (self.previous_state.kinematic.c.mag**2 - self.first_state.kinematic.c.mag**2)
-        #            - (-self.previous_state.kinematic.w.mag**2)
-        #            - (-self.kinematic.u.theta**2 + self.previous_state.kinematic.u.theta**2))
-        # print(w)
-        #
-        # print(self.kinematic.u.theta-self.kinematic.c.theta)
-        # self.kinematic.w.set_vector_with_thetacomponent_mag(self.kinematic.u.theta-self.kinematic.c.theta, w)
 
 
 

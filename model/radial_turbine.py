@@ -15,15 +15,19 @@ class RadialTurbine():
         self.states = []
         self.omega = omega
 
+        #-----------------------------------------
+        #      turbine state 1 (inlet stator)
+        # -----------------------------------------
 
-        #-------turbine state 1 (inlet stator)
         self.state1 = TurbineState(0, r1, h1)
         self.state1.thermodynamic.set_totalPT(P01,T01)
         self.state1.set_rothalpy()
         minimize(self.calc_cmag_given_massflow_alpha1, 0.001, args=(alpha1))
 
+        #-----------------------------------------
+        #      turbine state 2 (stator/rotor interface)
+        # -----------------------------------------
 
-        #-------turbine state 2 (stator/rotor interface)
         self.state2 = TurbineState(omega, r2, h2)
         self.state2.massflow = self.state1.massflow
         self.state2.set_previous(self.state1)
@@ -34,7 +38,10 @@ class RadialTurbine():
         minimize(self.calc_P2_given_massflow_alpha2, 0.01e5, args=(alpha2, self.state2.thermodynamic.total.S), method='Nelder-Mead' )
         self.state2.set_rothalpy()
 
-        #-------turbine state 3 (rotor outlet)
+        #-----------------------------------------
+        #      turbine state 3 (rotor outlet)
+        # -----------------------------------------
+
         self.state3 = TurbineState(omega, r3, h3)
         self.state3.massflow = self.state1.massflow
         self.state3.set_previous(self.state2)
@@ -57,7 +64,11 @@ class RadialTurbine():
         self.state3.set_massflow()
         self.state3.set_rothalpy()
 
-        #-------states
+
+        # -----------------------------------------
+        #     All States
+        # -----------------------------------------
+
         self.states.append(self.state1)
         self.states.append(self.state2)
         self.states.append(self.state3)
