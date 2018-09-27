@@ -23,6 +23,7 @@ r3=0.0873
 
 #inlet conditions
 P1=31.95e5
+P2=.5e5
 T1=587.65
 C1=0.5
 alpha1 = 0
@@ -32,12 +33,13 @@ alpha2=85.2
 DOR = 0.295658
 zeta3 = 0
 #outlet conditions
-P3 = 0.08926012e5
+P3 = 0.09926012e5
 init=480
 
+P4 = 0.15e5
 massflow = .18
-optimized = False
-turbine = RadialTurbine(omega, h1, h2, h3, r1, r2, r3, P1, T1, alpha1, alpha2, zeta3, P3, massflow, optimized)
+optimized = True
+turbine = RadialTurbine(omega, h1, h2, h3, r1, r2, r3, P1, T1, alpha1, P2, zeta3, P3, P4,massflow, optimized)
 
 #print(turbine.get_turbine_info())
 turbine.print_stages()

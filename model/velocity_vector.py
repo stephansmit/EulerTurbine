@@ -34,9 +34,16 @@ class VelocityVector():
 
     def set_vector_with_rcomponent_mag(self, r, mag):
         self.r = r
-        self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
+        self.theta = np.sqrt(mag ** 2 - self.r ** 2)
         self.z = 0
         self.set_vector_with_components()
+
+    def set_vector_with_rcomponent_mag2(self, r, mag):
+            self.r = r
+            self.theta = -np.sqrt(mag ** 2 - self.r ** 2)
+            self.z = 0
+            self.set_vector_with_components()
+
 
     def get_velocity_info(self):
         return dict({'r': self.r, 'theta': self.theta, 'z': self.z,'mag': self.mag, "mach": self.mach})

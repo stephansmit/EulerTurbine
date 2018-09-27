@@ -29,6 +29,10 @@ class KinematicState():
         # self.c.vec = np.append(self.c.r, self.c.theta)
         self.set_c_with_w_u()
 
+    def set_state_with_cr_cmag(self,cr,cmag):
+        self.c.set_vector_with_rcomponent_mag(cr,cmag)
+        self.set_w_with_c_u()
+
     def set_w_with_c_u(self):
         self.w.vec = np.subtract(self.c.vec, self.u.vec)
         self.w.set_components_with_vector()

@@ -7,6 +7,8 @@ class ThermodynamicState():
         self.fluid = fluid
         self.total = ThermodynamicProperties()
         self.static = ThermodynamicProperties()
+        self.isentropic_total = ThermodynamicProperties()
+        self.isentropic_static = ThermodynamicProperties()
 
     #static conditions
     def set_staticPT(self, P,T):
@@ -15,6 +17,18 @@ class ThermodynamicState():
         self.static.set_stateHS(H,S)
     def set_staticHP(self, H, P ):
         self.static.set_stateHP(H,P)
+    def set_staticPS(self, P, S ):
+        self.static.set_statePS(P,S)
+
+    #isentropic static conditions
+    def set_isentropic_staticPT(self, P, T):
+        self.isentropic_static.set_statePT(P, T)
+    def set_isentropic_staticPS(self, P, S):
+            self.isentropic_static.set_statePS(P,S)
+    def set_isentropic_staticHS(self, H, S):
+        self.isentropic_static.set_stateHS(H, S)
+    def set_isentropic_staticHP(self, H, P):
+        self.isentropic_static.set_stateHP(H, P)
 
     #total conditions
     def set_totalPT(self, P, T):
@@ -23,9 +37,17 @@ class ThermodynamicState():
         self.total.set_stateHS(H,S)
     def set_totalHP(self, H, P ):
         self.total.set_stateHP(H,P)
+    #isentropic total conditions
+    def set_isentropic_totalPT(self, P, T):
+        self.isentropic_total.set_statePT(P, T)
+    def set_isentropic_totalPS(self, P, S):
+            self.isentropic_total.set_statePS(P,S)
+    def set_isentropic_totalHS(self, H, S):
+        self.isentropic_total.set_stateHS(H, S)
+    def set_isentropic_totalHP(self, H, P):
+        self.isentropic_total.set_stateHP(H, P)
 
-    def set_staticPS(self, P,S):
-        self.static.set_statePS(P,S)
+
     def get_c_static_total(self):
         return np.sqrt(2*(self.total.H - self.static.H))
 
@@ -45,8 +67,7 @@ class ThermodynamicState():
 
 
     def set_total_with_etatotal_statetotal_ptotal(self, etatotal, statetotal_in, ptotal_out):
-        htotal_s_out = PropsSI('H', 'S', statetotal_in.S,'P', ptotal_out, self.fluid)
-        htotal_out = statetotal_in.H - etatotal*(statetotal_in.H - htotal_s_out)
+        htotal_out = statetotal_in.H - etatotal*(statetotal_in.H - self.isentropic_total.H)
         self.set_totalHP(htotal_out, ptotal_out )
 
     def set_htotal_with_etastatic_statetotal_pstatic(self, etastatic, statetotal_in, pstatic_out):
@@ -56,7 +77,8 @@ class ThermodynamicState():
         self.static.P = pstatic_out
 
     def get_thermodynamic_info(self):
-        return dict({"static":self.static.get_properties_info(),"total": self.total.get_properties_info()})
+        return dict({"static":self.static.get_properties_info(),"total": self.total.get_properties_info(),
+                     "isentropic_static":self.static.get_properties_info(),"isentropic_total": self.total.get_properties_info()})
 
 class ThermodynamicProperties():
     def __init__(self, fluid="Toluene", H=0, S=0, T=0, P=0, D=0, A=0):

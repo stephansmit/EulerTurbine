@@ -134,6 +134,22 @@ class TurbineState():
         print("static Temperature: "  +str(self.thermodynamic.static.T))
         print("")
 
+        print("")
+        print("Isentropic Total Enthalpy: "     +str(self.thermodynamic.isentropic_total.H))
+        print("Isentropic Total Entropy: "      +str(self.thermodynamic.isentropic_total.S))
+        print("Isentropic Total Density: "      +str(self.thermodynamic.isentropic_total.D))
+        print("Isentropic Total Pressure: "     +str(self.thermodynamic.isentropic_total.P))
+        print("Isentropic Total Temperature: "  +str(self.thermodynamic.isentropic_total.T))
+        print("")
+        print("")
+        print("Isentropic Static Enthalpy: "     +str(self.thermodynamic.isentropic_static.H))
+        print("Isentropic Static Entropy: "      +str(self.thermodynamic.isentropic_static.S))
+        print("Isentropic Static Density: "      +str(self.thermodynamic.isentropic_static.D))
+        print("Isentropic Static Pressure: "     +str(self.thermodynamic.isentropic_static.P))
+        print("Isentropic Static Temperature: "  +str(self.thermodynamic.isentropic_static.T))
+        print("")
+
+
         print("Rothalpy: " + str(self.rothalpy))
         print("Mag Absolute Velocity: " + str(self.kinematic.c.mag))
         print("Absolute Velocity: " + str([self.kinematic.c.theta, self.kinematic.c.r]))
