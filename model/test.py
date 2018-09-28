@@ -2,6 +2,8 @@ from numpy import pi, sin
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider, Button, RadioButtons
+import ipywidgets as widgets
+
 
 def signal(amp, freq):
     return amp * sin(2 * pi * freq * t)
@@ -56,5 +58,6 @@ def color_radios_on_clicked(label):
     line.set_color(label)
     fig.canvas.draw_idle()
 color_radios.on_clicked(color_radios_on_clicked)
+
 
 plt.show()

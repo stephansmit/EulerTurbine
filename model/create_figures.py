@@ -30,19 +30,19 @@ def filter_df_3cols(df, c1, f1,c2, f2,c3, f3):
 
 def filter_df_4cols(df, c1, f1,c2, f2,c3, f3, c4, f4):
     return df[
-    (abs(df[c1]-f1)<1e-10) &
-    (abs(df[c2]-f2)<1e-10) &
-    (abs(df[c3]-f3)<1e-10) &
-    (abs(df[c4]-f4)<1e-10) 
+    (abs(df[c1]-f1)<1e-5) &
+    (abs(df[c2]-f2)<1e-5) &
+    (abs(df[c3]-f3)<1e-5) &
+    (abs(df[c4]-f4)<1e-5)
     ]
 
 def filter_df_5cols(df, c1, f1,c2, f2,c3, f3, c4, f4, c5, f5):
     return df[
-    (abs(df[c1]-f1)<1e-10) &
-    (abs(df[c2]-f2)<1e-10) &
-    (abs(df[c3]-f3)<1e-10) &
-    (abs(df[c4]-f4)<1e-10) & 
-    (abs(df[c5]-f5)<1e-10) 
+    (abs(df[c1]-f1)<1e-5) &
+    (abs(df[c2]-f2)<1e-5) &
+    (abs(df[c3]-f3)<1e-5) &
+    (abs(df[c4]-f4)<1e-5) &
+    (abs(df[c5]-f5)<1e-5)
     ]
 def filter_df_6cols(df, c1, f1,c2, f2,c3, f3, c4, f4, c5, f5, c6, f6):
     return df[

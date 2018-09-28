@@ -6,7 +6,7 @@ import collections
 import math
 
 class RadialTurbine():
-    def __init__(self, hz, h1, h2, h3, r1, r2, r3, P01, T01, alpha1, P2, zeta3, P3, P4,massflow, optimizedh):
+    def __init__(self, hz, h1, h2, h3, r1, r2, r3, P01, T01, alpha1, P2, zeta3, P3, P4,eta1, eta2,massflow, optimizedh):
 
         omega = hz*2*math.pi
 
@@ -14,6 +14,8 @@ class RadialTurbine():
         self.desired_massflow = massflow
         self.states = []
         self.omega = omega
+        self.eta1 = eta1
+        self.eta2 = eta2
 
         #-----------------------------------------
         #      turbine state 1 (inlet stator)
@@ -41,7 +43,7 @@ class RadialTurbine():
         self.state2.thermodynamic.set_isentropic_staticPS(P2,self.state1.thermodynamic.total.S)
         self.state2.thermodynamic.total.H = self.state1.thermodynamic.total.H
         c2s = np.sqrt(2*(self.state2.thermodynamic.total.H-self.state2.thermodynamic.isentropic_static.H))
-        c2mag = 1.0*c2s
+        c2mag = eta1*c2s
         minimize(self.calc_S2_given_c2P2, self.state1.thermodynamic.total.S, args=(P2, c2mag), method='Nelder-Mead' )
         self.state2.thermodynamic.set_totalHS(self.state2.thermodynamic.total.H, self.state2.thermodynamic.static.S)
         c2r = self.state2.massflow/self.state2.area*self.state2.thermodynamic.static.D
@@ -60,13 +62,14 @@ class RadialTurbine():
         self.state3.thermodynamic.set_isentropic_staticPS(P3, self.state2.thermodynamic.static.S)
 
         w3s = np.sqrt(2 * (self.state2.rothalpy - self.state3.thermodynamic.isentropic_static.H + (self.state3.kinematic.u.theta ** 2) / 2))
-        w3 =1.0 *w3s
+        w3 =eta2 *w3s
+        print(w3s)
+
         minimize(self.calc_S3_given_w3P3, self.state3.thermodynamic.isentropic_static.S, args=(P3,w3),method='Nelder-Mead')
         # #w3thetar = w3 * np.cos(np.radians(zeta3))
         if self.optimized:
             #pass
             cmag = np.sqrt(w3**2-self.state3.kinematic.u.mag**2)
-            print(cmag)
             self.state3.kinematic.set_state_alpha_cmag(0.0,cmag )
             h3= self.state3.massflow/(self.state3.kinematic.c.mag*self.state3.thermodynamic.static.D*self.state3.circumferential)
             self.state3.set_area_h(h3)
@@ -94,6 +97,8 @@ class RadialTurbine():
         self.state4.thermodynamic.static.H = self.state4.thermodynamic.total.H - .5*c4mag**2
         self.state4.thermodynamic.set_staticHP(self.state4.thermodynamic.static.H, self.state4.thermodynamic.static.P)
         self.state4.thermodynamic.set_totalHS(self.state4.thermodynamic.total.H, self.state4.thermodynamic.static.S)
+        self.state4.thermodynamic.set_isentropic_staticHS(self.state4.thermodynamic.total.H, self.state4.thermodynamic.static.S)
+        self.state4.thermodynamic.set_isentropic_totalHS(self.state4.thermodynamic.total.H, self.state4.thermodynamic.static.S)
 
 
         # -----------------------------------------
@@ -107,8 +112,11 @@ class RadialTurbine():
 
         for i in self.states:
             i.kinematic.set_angles()
-        #     i.thermodynamic.static.set_speedofsound()
-        #     i.kinematic.set_mach_numbers(i.thermodynamic.static.A)
+            i.thermodynamic.static.set_speedofsound()
+            i.thermodynamic.isentropic_static.set_speedofsound()
+            i.thermodynamic.isentropic_total.set_speedofsound()
+            i.thermodynamic.isentropic_total.set_speedofsound()
+            i.kinematic.set_mach_numbers(i.thermodynamic.static.A)
 
         self.calc_DOR_velocity()
         self.calc_DOR_enthalpy()
@@ -214,10 +222,13 @@ class RadialTurbine():
                "optimized": self.optimized,
                "R": self.DOR_enthalpy,
                "omega": self.omega,
-               "work": self.work_enthalpy,
+                "eta1": self.eta1,
+                "eta2": self.eta2,
+            "work": self.work_enthalpy,
                "state1": self.state1.get_turbinestate_info(),
                "state2": self.state2.get_turbinestate_info(),
-               "state3": self.state3.get_turbinestate_info()}))
+               "state3": self.state3.get_turbinestate_info(),
+               "state4": self.state4.get_turbinestate_info()}))
 
 
     def flatten(self,d, parent_key='', sep='_'):

@@ -9,7 +9,7 @@ import numpy as np
 
 
 #rotationalspeed
-omega = 520
+omega = 425
 etats = 0.5
 #heights
 h1 = 8.897e-3
@@ -33,7 +33,7 @@ alpha2=85.2
 DOR = 0.295658
 zeta3 = 0
 #outlet conditions
-P3 = 0.09926012e5
+P3 = 0.05926012e5
 init=480
 
 P4 = 0.15e5
@@ -44,7 +44,7 @@ turbine = RadialTurbine(omega, h1, h2, h3, r1, r2, r3, P1, T1, alpha1, P2, zeta3
 #print(turbine.get_turbine_info())
 turbine.print_stages()
 turbine.print_turbine()
-
+print(turbine.get_turbine_info())
 
 #turbine.draw_velocity_triangle()
 #print(turbine.get_turbine_info())
