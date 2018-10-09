@@ -1,5 +1,6 @@
 #!/bin/bash
-#SBATCH -t 10:00:00
-#SBATCH -n 12
+#SBATCH -t 24:00:00
+#SBATCH -n 36
+##SBATCH --mem-per-cpu=4000	
 
-python2 create_data.py 12
+python2 create_data.py 36

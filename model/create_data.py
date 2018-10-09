@@ -157,7 +157,7 @@ if __name__=="__main__":
     df_optimized['key'] = 1
     df_h2['h2'] = np.linspace(1e-3, 2e-3,1)
     df_h2['key']=1
-    df_h3['h3'] = np.linspace(2e-3, 10e-3, 10)
+    df_h3['h3'] = np.linspace(3e-3, 10e-3, 10)
     df_h3['key'] = 1
     #df_alpha2['alpha2'] = np.linspace(70, 85,20)
     #df_alpha2['key']=1
@@ -165,12 +165,10 @@ if __name__=="__main__":
     df_P2['key']=1
     df_omega['omega']=np.linspace(350,550, 10)
     df_omega['key']=1
-    df_eta1['eta1']=np.linspace(0.9,1.0, 10)
+    df_eta1['eta1']=np.linspace(0.9,1.0, 2)
     df_eta1['key']=1
-    df_eta2['eta2']=np.linspace(0.9,1.0, 10)
+    df_eta2['eta2']=np.linspace(0.9,1.0, 2)
     df_eta2['key']=1
-    df_zeta3['zeta3'] = np.linspace(0, 25.0, 1)
-    df_zeta3['key']=1
     df_p3['P3'] = np.linspace(.07e5,.15e5, 10)
     df_p3['key']=1
 
@@ -178,8 +176,7 @@ if __name__=="__main__":
     df2 = pd.merge(df_P2, df1, on='key')
     df3 = pd.merge(df_h2, df2, on='key')
     df4 = pd.merge(df_h3, df3, on='key')
-    df5 = pd.merge(df_zeta3, df4, on='key')
-    df6 = pd.merge(df_eta1, df5, on='key')
+    df6 = pd.merge(df_eta1, df4, on='key')
     df7 = pd.merge(df_eta2, df6, on='key')
 
     df = pd.merge(df_p3, df7, on='key')
@@ -196,10 +193,10 @@ if __name__=="__main__":
     df['C1']=0.5
     df['alpha1']=0
     df['massflow']=.18
+    df['zeta3']=0.0
     #df['P3'] = .2e5
     
     dfturbine = parallelized_getRadialTurbineInfo(df, ncores)
-    dfturbine.to_csv("../data/EulerTurbineData_before.txt", sep='\t', index=False)
 
     dfplot = dfturbine.dropna()
     dfplot.to_csv("../data/EulerTurbineData.txt", sep='\t', index=False)
